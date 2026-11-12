@@ -1,10 +1,10 @@
 ---
-name: ask-matt
+name: metaskills-help
 description: Ask which skill or flow fits your situation. A router over the skills in this repo.
 disable-model-invocation: true
 ---
 
-# Ask Matt
+# Metaskills Help
 
 You don't remember every skill, so ask.
 
@@ -94,4 +94,6 @@ Off the main flow entirely.
 
 ## Precondition
 
-**`/setup-matt-pocock-skills`**: run before your first engineering flow to configure the issue tracker, triage labels, and doc layout the other skills assume. Custom issue trackers also work.
+**`/setup-work-repo`**: run before your first engineering flow to configure the issue tracker, triage labels, and doc layout the other skills assume. Custom issue trackers also work.
+
+**`/setup-home-repo`** (in progress, optional): sets up a **Home Repo**, one repo holding an effort's shared skills, AGENTS.md, config and optional effort tracker, from which agents reach every **work repo**. Recommend it when the effort spans several repos, or when a team works on it: even a team of one, as long as it's a serious effort rather than a tiny pet project. Skip it otherwise; a single work repo set up with `/setup-work-repo` is enough. When you do set one up, run it first, then `/setup-work-repo` in each work repo.

@@ -1,6 +1,6 @@
 # Matt Pocock Skills
 
-A collection of agent skills (slash commands and behaviors) loaded by Claude Code. Skills are organized into buckets and consumed by per-repo configuration emitted by `/setup-matt-pocock-skills`.
+A collection of agent skills (slash commands and behaviors) loaded by Claude Code. Skills are organized into buckets and consumed by per-repo configuration emitted by `/setup-work-repo`.
 
 ## Language
 
@@ -18,11 +18,20 @@ A `wayfinder` unit: a child **Issue** of a `wayfinder:map` holding a *question* 
 **Triage role**:
 A canonical state-machine label applied to an **Issue** during triage (e.g. `needs-triage`, `ready-for-afk`). Each role maps to a real label string in the **Issue tracker** via `docs/agents/triage-labels.md`.
 
+**Home Repo**:
+One git repo for an effort (one person, a team, several teams, a sub-project, a cross-product effort, or any mix) that holds its shared skills, AGENTS.md, shared docs and config. Agents run from it. The root of the effort's repo tree. Set up by `setup-home-repo`.
+_Avoid_: meta repo, hub repo
+
+**Work Repo**:
+A leaf of a **Home Repo**'s repo tree: a repo where the code lives, keeping its own AGENTS.md, **Issue tracker** and history. Set up by `setup-work-repo`.
+_Avoid_: child repo, leaf repo, tracked repo
+
 ## Relationships
 
 - An **Issue tracker** holds many **Issues**
 - An **Issue** carries one **Triage role** at a time
 - A **Decision ticket** is an **Issue** (a child of a `wayfinder:map`)
+- A **Home Repo** points at many **Work Repos**
 
 ## Flagged ambiguities
 
