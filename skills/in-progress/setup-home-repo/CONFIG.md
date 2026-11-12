@@ -2,10 +2,12 @@
 
 The Home Repo's two config files, each a Markdown file of sections:
 
-- the **shared config**, `config.md` (committed): true on every machine. Its `## Roles` section describes each role people take in the effort. Its `## Repos` section lists each repo's name, purpose, remote, hint and main rules.
-- the **local config**, `config.local.md` (gitignored): true on this machine only. Its `## Roles` section lists the user's roles, from the shared config or custom, and marks which ones to assume by default. Its `## Repos` section lists the projects directories, which one new clones go into, each repo's path, and rule overrides.
+- the **shared config**, `config.md` (committed): true on every machine. Its `## Roles` section describes each role people take in the effort. Its `## Repos` section lists each repo's name, purpose, remote, hint and main rules. Its `## Linked Home Repos` section lists other efforts' Home Repos and the role to assume in each.
+- the **local config**, `config.local.md` (gitignored): true on this machine only. Its `## Roles` section lists the user's roles, from the shared config or custom, and marks which ones to assume by default. Its `## Repos` section lists the projects directories, which one new clones go into, each repo's path, and rule overrides. Its `## Linked Home Repos` section gives each linked Home Repo's path, and a different role when the user takes one there.
 
 A **role** is a kind of person working on the effort, such as an SWE, a DevOps engineer, or a collaborator from another team. A **rule** is a line under a repo that gives context: who owns it, what each role is responsible for there, what to check before changing it. A rule can apply to every role or to one.
+
+A **linked Home Repo** is another effort's Home Repo that this effort depends on, such as the Home Repo of a platform another team owns. Linking federates the two efforts: the agent works in the other effort through that Home Repo's own config and roles, without copying its work repos here.
 
 Other sections, such as facts about the effort or the person on this machine, go in whichever file matches where they are true.
 
@@ -51,8 +53,26 @@ If `config.local.md` is missing or marks no default, ask me for my projects dire
 
 Whenever you clone, create or find an unlisted repo, add it to `config.local.md`, and to `config.md` when it has a remote.
 
+### Linked Home Repos
+
+Other efforts this one depends on, such as a platform another team owns, each have their own Home Repo.
+
+- `config.md` `## Linked Home Repos`, one line per linked Home Repo:
+  `- **<name>** (<what that effort covers>): <remote URL>. As: <role from its config.md>. <optional hint>`
+- `config.local.md` (gitignored) `## Linked Home Repos`, one line each: `- <name>: <absolute path>`, plus ` As: <role>` when I take a different role there.
+
+When a task needs work in a linked effort, such as filing an issue, opening a PR or changing one of its work repos:
+
+1. Take its path from `config.local.md` and pull it. If the path is missing, clone the remote into the directory that holds this Home Repo, not a projects directory, and record the path. Home Repos sit together, wherever I keep them. If I have no access, say so and ask me how to proceed.
+2. Read its AGENTS.md and `config.md`. Take on the role named here, the local `As:` winning, as that Home Repo's `## Roles` describes it. Its config, rules and trackers govern the work there, along with any hint here.
+3. If it has no `config.local.md`, create one with my projects directories from this file and that role as my only default role.
+4. Reach its work repos through its config, and keep them out of this effort's lists. Follow its own linked Home Repos only when the task needs them, the same way.
+
+When the linked work is done, return to this effort's roles.
+
 ### Issues
 
 An issue about one work repo goes to that work repo's own tracker, as its AGENTS.md or `docs/agents/issue-tracker.md` says.
 An issue that spans repos, or is about the effort itself, goes to the effort tracker named in this file's `## Agent skills` section. With no effort tracker, ask me where.
+An issue for a linked effort goes where that effort's Home Repo says.
 ```

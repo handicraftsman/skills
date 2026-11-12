@@ -41,6 +41,7 @@ Decisions, with the answer to recommend:
 - Create mode: who the effort spans (one person, a team, several teams, a sub-project under a product, a cross-product effort, or a mix), and the roles that follow. Recommend one role per kind of person who will run agents here; a one-person effort gets one role.
 - The user's roles on this machine: any from the shared config, with customizations, plus any custom ones. Then which of them to assume by default. Recommend the role that fits the repos they commit to most as the one default. Refresh mode asks only when the local config names no role.
 - Rules for each work repo, main or local override. Recommend none: record only the rules the user gives.
+- Linked Home Repos: other efforts' Home Repos this one depends on, each with the role to assume there. Recommend none: record only the ones the user gives. Refresh mode does not ask; a linked Home Repo is cloned on first need.
 - The effort tracker, optional. Read [ISSUE-TRACKER.md](ISSUE-TRACKER.md) and settle its Choose step. Refresh mode asks only when the Home Repo has no `docs/agents/issue-tracker.md`.
 - Refresh mode: whether to clone **absent** repos now. Recommend cloning on first need.
 

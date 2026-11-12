@@ -32,6 +32,7 @@ _Avoid_: child repo, leaf repo, tracked repo
 - An **Issue** carries one **Triage role** at a time
 - A **Decision ticket** is an **Issue** (a child of a `wayfinder:map`)
 - A **Home Repo** points at many **Work Repos**
+- A **Home Repo** can link other efforts' **Home Repos**, naming the role its people assume in each
 
 ## Flagged ambiguities
 
