@@ -1,0 +1,14 @@
+# Inside a Guild Repo
+
+A Home Repo can be a directory of a **Guild Repo**: one monorepo, set up by `/setup-guild-repo`, that holds an org's Home Repos and work repos as directories in one git history. Its root holds `guild.md` (the org tree, its roles, and every Home Repo's directory) and `guild.local.md` (the user's place, guild roles and Home Repos), and a guild tracker that a Home Repo's own tracker overrides.
+
+Read `guild.md`, and `guild.local.md` when it exists, before Step 2. These rules replace the matching parts of the skill:
+
+- **The Home Repo is a directory.** Create mode creates no git repo: recommend the directory `guild.md` already names for it, else `homes/<name>/`, and add its line to `guild.md` `## Home Repos` when missing. Commit to the guild's history on a new local branch. The guild root's `.gitignore` already covers `config.local.md`: confirm with `git check-ignore` from the Home Repo's directory.
+- **Roles.** In Step 2, recommend the roles in `config.md` that match the user's guild roles in `guild.local.md`.
+- **Work repos are directories.** Step 3 searches the guild tree for project roots (a directory with its own AGENTS.md, package manifest or build file) instead of the user's projects directories. A work repo in the guild has a `config.md` line with a directory, not a remote: `- **<name>** (<what it is>): <directory from the guild root>. <optional hint>`. Its `config.local.md` line carries no path, only the default marker: `- <name> (default)`. Ask for projects directories only when a work repo lives outside the guild; such a repo keeps its remote line, path and clone rules.
+- **Imported Home Repos.** In join mode, a `config.md` line whose remote now lives in the guild as a directory (imported by `/setup-guild-repo`) becomes a directory line, and its path leaves `config.local.md`. Show each conversion in Step 5.
+- **Linked Home Repos in the same guild** link by directory, with no path in `config.local.md`: `- **<name>** (<what that effort covers>): <directory from the guild root>. As: <role>`.
+- **Effort tracker.** Recommend **None**: the guild tracker serves this Home Repo, tagged with `home:` and `repo:`. An own tracker overrides it for this Home Repo and its work repos, with `repo:` tags only.
+- **Shared material.** Material every Home Repo in the guild shares belongs at the guild root, not here. Show such items with the guild root as destination.
+- **Config template.** In `### Repos`, add the directory line format above. When every work repo is in the guild, leave out the lines about projects directories, paths, clone protocol and cloning. In `### Linked Home Repos`, add the directory line format above. In `### Issues`, replace "With no effort tracker, ask me where." with "With no effort tracker, use the guild tracker, as the guild root's AGENTS.md says."

@@ -15,12 +15,15 @@ Offer these, recommending the first that fits:
 
 For GitHub, GitLab or Forgejo, also settle the Home Repo's remote URL, since the tracker lives there.
 
-Done when the tracker is chosen, and for GitHub, GitLab or Forgejo, the remote URL is known.
+Then read [REPO-TAGS.md](REPO-TAGS.md) and settle its Choose step for this tracker, with `repo:` tags.
+
+Done when the tracker and its repo tags are chosen, and for GitHub, GitLab or Forgejo, the remote URL is known.
 
 ## Apply
 
-1. Write `docs/agents/issue-tracker.md` in the Home Repo from the matching seed template: [issue-tracker-github.md](issue-tracker-github.md), [issue-tracker-gitlab.md](issue-tracker-gitlab.md), [issue-tracker-forgejo.md](issue-tracker-forgejo.md) or [issue-tracker-local.md](issue-tracker-local.md). For **Other**, write it from scratch using the user's description. Leave the GitHub, GitLab and Forgejo templates' "PRs as a request surface" flag off, and don't raise it.
-2. Add this block to the Home Repo's AGENTS.md, or update it in place when an `## Agent skills` block already exists:
+1. Write `docs/agents/issue-tracker.md` in the Home Repo from the matching seed template: [issue-tracker-github.md](issue-tracker-github.md), [issue-tracker-gitlab.md](issue-tracker-gitlab.md), [issue-tracker-forgejo.md](issue-tracker-forgejo.md) or [issue-tracker-local.md](issue-tracker-local.md). For **Other**, write it from scratch using the user's description. Leave the GitHub, GitLab and Forgejo templates' "PRs as a request surface" flag off, and don't raise it. When only the repo tags were chosen in this run, keep the existing file and skip to step 2.
+2. Run the Apply step of [REPO-TAGS.md](REPO-TAGS.md).
+3. Add this block to the Home Repo's AGENTS.md, or update it in place when an `## Agent skills` block already exists:
 
    ```markdown
    ## Agent skills
@@ -31,6 +34,6 @@ Done when the tracker is chosen, and for GitHub, GitLab or Forgejo, the remote U
    ```
 
    The block goes in AGENTS.md even when the harness loads CLAUDE.md, because in a Home Repo, CLAUDE.md is only a one-line pointer to AGENTS.md.
-3. For GitHub, GitLab or Forgejo, wire up the remote when no `git remote` points at that host: `git remote add origin <url>`. Then run `gh repo view`, `glab repo view` or `fj repo view` from the Home Repo.
+4. For GitHub, GitLab or Forgejo, wire up the remote when no `git remote` points at that host: `git remote add origin <url>`. Then run `gh repo view`, `glab repo view` or `fj repo view` from the Home Repo.
 
-Done when `docs/agents/issue-tracker.md` and the `## Agent skills` block are written, and for GitHub, GitLab or Forgejo, the repo view prints the project. When it can't, the remote repo likely doesn't exist yet: keep the written files, and report that the tracker becomes reachable once the user creates and pushes the remote.
+Done when `docs/agents/issue-tracker.md` with its `## Repo tags` section and the `## Agent skills` block are written, and for GitHub, GitLab or Forgejo, the repo view prints the project. When it can't, the remote repo likely doesn't exist yet: keep the written files, and report that the tracker becomes reachable once the user creates and pushes the remote.

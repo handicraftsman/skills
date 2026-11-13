@@ -1,5 +1,5 @@
 interface:
   display_name: "Setup Home Repo"
-  short_description: "Set up or refresh a Home Repo for an effort"
+  short_description: "Set up or join a Home Repo for an effort"
 policy:
   allow_implicit_invocation: false

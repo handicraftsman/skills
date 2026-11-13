@@ -10,11 +10,11 @@ Work through these in order and use the first that answers:
 2. **AGENTS.md**: the `### Issue tracker` line in this repo's `## Agent skills` block names the Home Repo and its remote. Use that Home Repo, cloning or pulling it as its own config describes.
 3. **Ask the user** which Home Repo this repo belongs to.
 
-Then read the Home Repo's `docs/agents/issue-tracker.md`. That file is the tracker's real workflow; this one only points at it.
+Then read the Home Repo's `docs/agents/issue-tracker.md`. That file is the tracker's real workflow; this one only points at it. When the Home Repo has none and sits in a Guild Repo (a monorepo with `guild.md` at its root), use the guild tracker in the guild root's `docs/agents/issue-tracker.md`.
 
 ## When a skill says "publish to the issue tracker"
 
-Follow the Home Repo's tracker workflow, run against the Home Repo rather than this repo: for example `gh issue create -R <owner>/<home-repo>`, or a file under the Home Repo's `.scratch/`. Name this repo in the title, as `[<repo name>] <title>`, so the effort tracker shows which work repo the issue is about.
+Follow the Home Repo's tracker workflow, run against the Home Repo rather than this repo: for example `gh issue create -R <owner>/<home-repo>`, or a file under the Home Repo's `.scratch/`. Tag the issue with this repo, and in a guild tracker with its Home Repo, as the tracker's `## Repo tags` section says. When the tracker has no such section, name this repo in the title instead, as `[<repo name>] <title>`.
 
 ## When a skill says "fetch the relevant ticket"
 

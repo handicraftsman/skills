@@ -26,6 +26,13 @@ _Avoid_: meta repo, hub repo
 A leaf of a **Home Repo**'s repo tree: a repo where the code lives, keeping its own AGENTS.md, **Issue tracker** and history. Set up by `setup-work-repo`.
 _Avoid_: child repo, leaf repo, tracked repo
 
+**Guild Repo**:
+One monorepo for an org (a single team up to a deep tree of divisions and teams) that holds its **Home Repos** and **Work Repos** as directories in one git history, its org tree, and a guild **Issue tracker** that a Home Repo or Work Repo can override. Set up by `setup-guild-repo`.
+_Avoid_: mega repo, org repo
+
+**Repo tag**:
+The label, field or component marking which **Home Repo** (`home:<name>`) and **Work Repo** (`repo:<name>`) an **Issue** is about, in an **Issue tracker** shared by several repos.
+
 ## Relationships
 
 - An **Issue tracker** holds many **Issues**
@@ -33,6 +40,8 @@ _Avoid_: child repo, leaf repo, tracked repo
 - A **Decision ticket** is an **Issue** (a child of a `wayfinder:map`)
 - A **Home Repo** points at many **Work Repos**
 - A **Home Repo** can link other efforts' **Home Repos**, naming the role its people assume in each
+- A **Guild Repo** holds many **Home Repos** and **Work Repos** as directories
+- An **Issue** in a shared **Issue tracker** carries **Repo tags**
 
 ## Flagged ambiguities
 
