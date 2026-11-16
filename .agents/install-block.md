@@ -38,7 +38,7 @@ Updates itself by default.
 <canonical-block name="codex">
 
 ```bash
-codex plugin marketplace add mattpocock/skills
+codex plugin marketplace add handicraftsman/skills
 codex plugin add metaskills@mattpocock
 ```
 
@@ -48,12 +48,12 @@ Updates itself at startup.
 
 ## GitHub Copilot (CLI and VS Code)
 
-Use the marketplace, not `copilot plugin install mattpocock/skills`. Copilot has deprecated direct repo installs, and they can't auto-update. The `extraKnownMarketplaces` entry follows the documented schema, but nobody has run it yet.
+Use the marketplace, not `copilot plugin install handicraftsman/skills`. Copilot has deprecated direct repo installs, and they can't auto-update. The `extraKnownMarketplaces` entry follows the documented schema, but nobody has run it yet.
 
 <canonical-block name="copilot">
 
 ```bash
-copilot plugin marketplace add mattpocock/skills
+copilot plugin marketplace add handicraftsman/skills
 copilot plugin install metaskills@mattpocock
 ```
 
@@ -62,12 +62,12 @@ Then, once, add to `~/.copilot/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "mattpocock": { "source": { "source": "github", "repo": "mattpocock/skills" }, "autoUpdate": true }
+    "mattpocock": { "source": { "source": "github", "repo": "handicraftsman/skills" }, "autoUpdate": true }
   }
 }
 ```
 
-In VS Code, run **Chat: Install Plugin From Source** and enter `https://github.com/mattpocock/skills`. It updates daily.
+In VS Code, run **Chat: Install Plugin From Source** and enter `https://github.com/handicraftsman/skills`. It updates daily.
 
 </canonical-block>
 
