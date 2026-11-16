@@ -39,7 +39,7 @@ Updates itself by default.
 
 ```bash
 codex plugin marketplace add mattpocock/skills
-codex plugin add mattpocock-skills@mattpocock
+codex plugin add metaskills@mattpocock
 ```
 
 Updates itself at startup.
@@ -54,7 +54,7 @@ Use the marketplace, not `copilot plugin install mattpocock/skills`. Copilot has
 
 ```bash
 copilot plugin marketplace add mattpocock/skills
-copilot plugin install mattpocock-skills@mattpocock
+copilot plugin install metaskills@mattpocock
 ```
 
 Then, once, add to `~/.copilot/settings.json`:
