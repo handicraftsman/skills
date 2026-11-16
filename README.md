@@ -44,7 +44,7 @@ Updates itself by default.
 
 ```bash
 codex plugin marketplace add handicraftsman/skills
-codex plugin add metaskills@mattpocock
+codex plugin add metaskills@handicraftsman-skills
 ```
 
 Updates itself at startup.
@@ -56,7 +56,7 @@ Updates itself at startup.
 
 ```bash
 copilot plugin marketplace add handicraftsman/skills
-copilot plugin install metaskills@mattpocock
+copilot plugin install metaskills@handicraftsman-skills
 ```
 
 Then, once, add to `~/.copilot/settings.json`:
@@ -64,7 +64,7 @@ Then, once, add to `~/.copilot/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "mattpocock": { "source": { "source": "github", "repo": "handicraftsman/skills" }, "autoUpdate": true }
+    "handicraftsman-skills": { "source": { "source": "github", "repo": "handicraftsman/skills" }, "autoUpdate": true }
   }
 }
 ```

@@ -11,8 +11,8 @@ Claude Code installs from its official marketplace, `claude-plugins-official`. E
 | Agent         | Route                            | Updates itself?                                                  |
 | ------------- | -------------------------------- | ---------------------------------------------------------------- |
 | Claude Code   | `@claude-plugins-official`       | Yes, by default                                                  |
-| Codex         | `@mattpocock` marketplace        | Yes, at startup, by default                                      |
-| Copilot CLI   | `@mattpocock` marketplace        | Yes, after a one-time `autoUpdate: true`                         |
+| Codex         | `@handicraftsman-skills` marketplace        | Yes, at startup, by default                                      |
+| Copilot CLI   | `@handicraftsman-skills` marketplace        | Yes, after a one-time `autoUpdate: true`                         |
 | VS Code       | Chat: Install Plugin From Source | Yes, daily, by default                                           |
 | Gemini CLI    | `gemini skills install` (copies) | No. A Gemini extension would need a flat `skills/<name>/` layout |
 | Everyone else | skills.sh                        | No. Run `npx skills update`, and re-run `add` for new skills     |
@@ -39,7 +39,7 @@ Updates itself by default.
 
 ```bash
 codex plugin marketplace add handicraftsman/skills
-codex plugin add metaskills@mattpocock
+codex plugin add metaskills@handicraftsman-skills
 ```
 
 Updates itself at startup.
@@ -54,7 +54,7 @@ Use the marketplace, not `copilot plugin install handicraftsman/skills`. Copilot
 
 ```bash
 copilot plugin marketplace add handicraftsman/skills
-copilot plugin install metaskills@mattpocock
+copilot plugin install metaskills@handicraftsman-skills
 ```
 
 Then, once, add to `~/.copilot/settings.json`:
@@ -62,7 +62,7 @@ Then, once, add to `~/.copilot/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "mattpocock": { "source": { "source": "github", "repo": "handicraftsman/skills" }, "autoUpdate": true }
+    "handicraftsman-skills": { "source": { "source": "github", "repo": "handicraftsman/skills" }, "autoUpdate": true }
   }
 }
 ```
