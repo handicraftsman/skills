@@ -1,8 +1,8 @@
 ## What it does
 
-`wizard` generates an interactive bash script that walks a human, step by step, through a manual procedure: wiring up third-party services, running a one-off migration, moving a project from state A to state B. It opens each URL, says what to click and copy, captures what comes back, and writes it into `.env` files and GitHub Actions secrets.
+`wizard` generates an interactive script, in bash and in PowerShell 7, that walks a human, step by step, through a manual procedure: wiring up third-party services, running a one-off migration, moving a project from state A to state B. It opens each URL, says what to click and copy, captures what comes back, and writes it into `.env` files and GitHub Actions secrets.
 
-The [agent](https://www.aihero.dev/ai-coding-dictionary/agent) writes the script; it never runs it. You do, on your own machine. A wizard is a program, not a list of instructions. The script runs each step in order and keeps the values you enter. Your part is to click, paste, and press Enter.
+The [agent](https://www.aihero.dev/ai-coding-dictionary/agent) writes the procedure down as a markdown source first, then builds both scripts from it; it never runs them. You do, on your own machine. A wizard is a program, not a list of instructions. The script runs each step in order and keeps the values you enter. Your part is to click, paste, and press Enter.
 
 ## When to reach for it
 
@@ -21,7 +21,7 @@ Don't reach for it to *decide* what to build; for that, [grill-with-docs](https:
 
 ## Prerequisites
 
-None to generate one. The wizard it writes runs on bash, and uses `gh` when a stage sets a GitHub secret or variable. If `gh` is missing or not authenticated, the run does not fail. That stage shows a warning, and the closing summary tells you what to set by hand.
+None to generate one. The wizard it writes runs on bash or PowerShell 7 (whichever you have), and uses `gh` when a stage sets a GitHub secret or variable. If `gh` is missing or not authenticated, the run does not fail. That stage shows a warning, and the closing summary tells you what to set by hand.
 
 ## Stages
 
@@ -39,18 +39,22 @@ For each captured value, scoping decides where it goes:
 | Both `.env` and a secret | Local dev and CI both need it |
 | Nowhere | The stage is a pure action: a switch flipped, a plan upgraded |
 
-## The template already solves the UX
+## One source, two builds
 
-The [template](https://github.com/mattpocock/skills/blob/main/skills/engineering/wizard/template.sh) ships the whole experience: progress with time remaining, confirmation gates, cross-platform URL opening including WSL, hidden entry for secrets, idempotent `.env` upserts, `gh secret` / `gh variable` writes, and a closing summary of everything it had to skip. Everything above the `STAGES` marker is a fixed library, identical in every wizard and never hand-edited. Because the library never changes, every wizard behaves the same way. The only work per wizard is to scope the procedure and author its stages.
+Every wizard is three files side by side: `<name>.wizard.md`, the procedure written out as one bullet per action, and the `.sh` and `.ps1` builds translated from it call for call. The source is the single source of truth. A change to the procedure lands in the markdown first and both scripts are rebuilt from it, so the bash and PowerShell versions cannot drift, and a reviewer reads one short markdown file instead of diffing two scripts.
 
-The agent that writes a wizard never runs it end to end, because the script opens browsers and waits for human input. The agent checks it statically instead: `bash -n`, `shellcheck` where available, and a trace that every value lands where scoping said it would, with every `set_secret` name matching a real `secrets.*` reference in CI. So the first run is yours, and that run is the test.
+## The templates already solve the UX
+
+The templates ([bash](https://github.com/mattpocock/skills/blob/main/skills/engineering/wizard/template.sh) and its PowerShell 7 port, `template.ps1`, which shares every helper name) ship the whole experience: progress with time remaining, confirmation gates, cross-platform URL opening including WSL, hidden entry for secrets, idempotent `.env` upserts, `gh secret` / `gh variable` writes, and a closing summary of everything it had to skip. Everything above the `STAGES` marker is a fixed library, identical in every wizard and never hand-edited. Because the library never changes, every wizard behaves the same way. The only work per wizard is to scope the procedure and author its stages.
+
+The agent that writes a wizard never runs it end to end, because the script opens browsers and waits for human input. The agent checks them statically instead: `bash -n` and `shellcheck` for the bash build, a parser check for the PowerShell one, and a trace against the source that every value lands where scoping said it would, with every `set_secret` name matching a real `secrets.*` reference in CI. So the first run is yours, and that run is the test.
 
 ## Ephemeral by default
 
-| What you have | What to do with the script |
+| What you have | What to do with the three files |
 | --- | --- |
-| A one-off migration, a personal setup, a transition you'll never repeat | Save it to a scratch or `scripts/` path, run it, delete it |
-| A setup path the next person on the repo will also need | Commit it and link it from the README, so they run the script instead of re-asking an agent |
+| A one-off migration, a personal setup, a transition you'll never repeat | Save them to a scratch or `scripts/` path, run one, delete all three |
+| A setup path the next person on the repo will also need | Commit all three and link the source from the README, so they run a script instead of re-asking an agent |
 
 ## Common questions
 
@@ -72,7 +76,7 @@ Nowhere in particular. It's a standalone, not a chain step. The common guess is 
 
 **Does it work outside Claude Code?**
 
-The script does. It's plain bash, and it runs the same whatever [harness](https://www.aihero.dev/ai-coding-dictionary/harness) generated it. The skill itself is model-invoked, so it's listed everywhere: type `/wizard` in Claude Code or `$wizard` in Codex, or just describe the setup you're stuck on. Being model-invoked also keeps it clear of [#693](https://github.com/mattpocock/skills/issues/693), where Claude's desktop and web apps drop *user-invoked* skills from the [model](https://www.aihero.dev/ai-coding-dictionary/model)'s listing and report them as not installed.
+The scripts do. They're plain bash and plain PowerShell 7, and they run the same whatever [harness](https://www.aihero.dev/ai-coding-dictionary/harness) generated them. The skill itself is model-invoked, so it's listed everywhere: type `/wizard` in Claude Code or `$wizard` in Codex, or just describe the setup you're stuck on. Being model-invoked also keeps it clear of [#693](https://github.com/mattpocock/skills/issues/693), where Claude's desktop and web apps drop *user-invoked* skills from the [model](https://www.aihero.dev/ai-coding-dictionary/model)'s listing and report them as not installed.
 
 **Didn't this used to be user-invoked?**
 
@@ -84,6 +88,7 @@ It did. It's now model-invoked, so the agent reaches for it unprompted when it h
 
 ## It's working if
 
+- A `.wizard.md` source exists before either script, and the `.sh` and `.ps1` read as the same list of actions.
 - You're shown an ordered list of stages, and the values each one produces, and asked to confirm, before any script exists.
 - Every URL is opened before the value from that page is asked for. You're never asked to paste something you haven't been sent to fetch.
 - Secrets are typed blind. Nothing sensitive echoes into your scrollback.

@@ -1,15 +1,17 @@
 ---
 name: wizard
-description: Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself.
+description: Generate an interactive wizard (bash and PowerShell 7) that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself.
 ---
 
 # Wizard
 
-A **wizard** is a bash script that walks a human, step by step, through a manual procedure that's tedious to do by hand and tedious to re-explain to an AI every time. It opens each URL, says exactly what to click and copy, captures the values, writes them where they belong (`.env`, GitHub secrets), confirms at every stage, and shows how many stages are left. It might configure third-party services, run a one-off migration, or move the project from one state to another.
+A **wizard** is a script that walks a human, step by step, through a manual procedure that's tedious to do by hand and tedious to re-explain to an AI every time. It opens each URL, says exactly what to click and copy, captures the values, writes them where they belong (`.env`, GitHub secrets), confirms at every stage, and shows how many stages are left. It might configure third-party services, run a one-off migration, or move the project from one state to another.
 
-The delightful UX is already solved by [template.sh](template.sh): stage-by-stage progress, confirmation gates, cross-platform URL opening (including WSL), hidden secret entry, idempotent `.env` upserts, `gh secret`/`gh variable` writes, and a closing summary. **Your job is only to scope the procedure and author its stages.** The library above the `STAGES` marker is identical in every wizard; that consistency is the point: never hand-edit it.
+Every wizard is three files side by side: a markdown **source** (`<name>.wizard.md`, the procedure textified) and two **builds** from it, `<name>.sh` for bash and `<name>.ps1` for PowerShell 7. The source is the single source of truth: a change lands there first, then both builds are regenerated from it, so the two can never drift apart.
 
-A wizard is ephemeral by default: built for one run, saved to a scratch or `scripts/` path, deleted when the job's done. Commit it only when the user wants a repeatable setup path that should live in the repo.
+The delightful UX is already solved by the libraries in [template.sh](template.sh) and [template.ps1](template.ps1), which share helper names and behaviour: stage-by-stage progress, confirmation gates, cross-platform URL opening (including WSL), hidden secret entry, idempotent `.env` upserts, `gh secret`/`gh variable` writes, and a closing summary. **Your job is only to scope the procedure, write its source, and build its stages.** The library above each template's `STAGES` marker is identical in every wizard; that consistency is the point: never hand-edit it.
+
+A wizard is ephemeral by default: built for one run, saved to a scratch or `scripts/` path, its three files deleted together when the job's done. Commit all three only when the user wants a repeatable setup path that should live in the repo.
 
 ## Process
 
@@ -30,15 +32,23 @@ For each stage, write the precise path a human follows: which URL to open, what 
 
 **Done when:** every stage traces to concrete instructions a stranger could follow.
 
-### 3. Author the wizard
+### 3. Write the source
 
-Copy `template.sh` to the target path. Replace the example stage with one `stage` per step, in dependency order. Use the library helpers: `stage`, `say`/`step`, `open_url`, `ask`/`ask_secret`, `write_env`, `set_secret`/`set_var`, `pause`/`confirm`. Set `TOTAL_STAGES` to the number of stages you wrote.
+Copy [template.md](template.md) to `<name>.wizard.md` at the target path and persist it before any script exists. Replace the example with one `## Stage:` per step, in dependency order, and one bullet per library call, following the grammar in the template's comment.
 
-Hold the bar the template sets: open the URL before asking for its value, use `ask_secret` for anything secret, `write_env` every persisted value, `set_secret` only the values CI actually needs, and `confirm` before any irreversible action. Each `stage` clears the screen so only the current step is visible: keep a stage to one focused task so nothing the human needs scrolls away. Don't touch the library above the marker.
+Hold the bar the library sets: open the URL before asking for its value, use `ask_secret` for anything secret, `write_env` every persisted value, `set_secret` only the values CI actually needs, and `confirm` before any irreversible action. Each `stage` clears the screen so only the current step is visible: keep a stage to one focused task so nothing the human needs scrolls away.
 
-### 4. Verify and hand off
+**Done when:** every stage and value from steps 1 and 2 appears in the source, and the `Builds:` line names both script paths.
 
-- `bash -n <script>`; run `shellcheck` if available.
-- `chmod +x <script>`.
-- Don't run it end-to-end yourself: it opens browsers and blocks on human input. Trace it statically instead: every value from step 1 is captured and lands where step 1 said, and every `set_secret` name exactly matches a `secrets.*` reference in CI.
-- Tell the user how to run it. If it's a repeatable setup path, commit it and link it from the README so the next person runs the script instead of asking an AI.
+### 4. Build both scripts from the source
+
+Copy `template.sh` to `<name>.sh` and `template.ps1` to `<name>.ps1`. In each, replace the example stage with a call-for-call translation of the source: every bullet becomes exactly one helper call, in the same order, with the same strings; a `confirm` bullet becomes an `if` around its indented bullets. Set `TOTAL_STAGES` (in the `.ps1`, `$script:TOTAL_STAGES`) to the number of `## Stage:` headings. Translate only what the source says: a fix the scripts need is a fix to the source, then a rebuild of both. Don't touch the library above either marker.
+
+**Done when:** both scripts read as the same bullet list, line for line, and neither carries a call the source lacks.
+
+### 5. Verify and hand off
+
+- `bash -n <name>.sh`; run `shellcheck` if available. `chmod +x <name>.sh`.
+- Parse-check the PowerShell build: `pwsh -NoProfile -Command '$e=$null; [void][Management.Automation.Language.Parser]::ParseFile("<name>.ps1",[ref]$null,[ref]$e); $e'` prints nothing when clean. Run `Invoke-ScriptAnalyzer -Severity Error` if it's installed.
+- Don't run either end-to-end yourself: they open browsers and block on human input. Trace them statically instead, against the source: every value from step 1 is captured and lands where step 1 said, and every `set_secret` name exactly matches a `secrets.*` reference in CI.
+- Tell the user how to run each build (`./<name>.sh`, or `pwsh <name>.ps1`). If it's a repeatable setup path, commit the source and both builds, and link the source from the README so the next person runs a script instead of asking an AI.
