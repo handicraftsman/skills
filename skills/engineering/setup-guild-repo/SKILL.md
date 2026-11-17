@@ -1,7 +1,6 @@
 ---
 name: setup-guild-repo
-description: Set up a Guild Repo, a monorepo holding an org's Home Repos and work repos as directories, or join one by finding your place in its org and choosing your Home Repos.
-disable-model-invocation: true
+description: Set up a Guild Repo, a monorepo holding an org's Home Repos and work repos as directories, or join one by finding your place in its org and choosing your Home Repos. Use when the user wants to organise several efforts or teams in one monorepo, bring separate repos into one, map an org tree to Home Repos, set up a guild-wide issue tracker, or is new to a repo with `guild.md` at its root and needs to find their team and Home Repos.
 ---
 
 # Setup Guild Repo

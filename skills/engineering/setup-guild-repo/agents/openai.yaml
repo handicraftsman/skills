@@ -1,5 +1,3 @@
 interface:
   display_name: "Setup Guild Repo"
   short_description: "Set up or join a Guild Repo monorepo"
-policy:
-  allow_implicit_invocation: false
